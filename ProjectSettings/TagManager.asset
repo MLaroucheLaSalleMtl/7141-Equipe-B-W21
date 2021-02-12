@@ -3,15 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Narwal
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Damageable
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 
@@ -40,4 +41,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Enemy
+    uniqueID: 3800506117
     locked: 0
