@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14cd32bc39e4cd243a6482318c13be01, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  speedX: 3.16
+  speedX: 3
   smoothDamp: 0.1
-  zeroVelocity: {x: 1.4368802, y: 0}
+  zeroVelocity: {x: 9.049324e-13, y: 0}
   jumpVelocity: 20
   groundCheckRadius: 0.3
   whatIsGround:

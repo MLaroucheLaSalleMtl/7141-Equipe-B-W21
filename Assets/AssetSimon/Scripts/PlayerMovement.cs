@@ -10,6 +10,15 @@ public class PlayerMovement : MonoBehaviour
     public int NormInputY { get; private set; } //le input pour le deplacement vertical (saut et/ou grimper)
   
     public bool JumpInput { get; private set; }
+
+    [SerializeField] private float inputHoldTime = 0.2f;
+
+    private float jumpInputStartTime;
+
+    private void Update()
+    {
+        CheckJumpInputHoldTime();
+    }
     public void OnMove(InputAction.CallbackContext context)
     {
         RawMoveInput = context.ReadValue<Vector2>();
@@ -23,8 +32,17 @@ public class PlayerMovement : MonoBehaviour
         if (context.started)
         {
             JumpInput = true;
+            jumpInputStartTime = Time.time;
         }
     }
 
     public void UseJumpInput() => JumpInput = false;
+
+    private void CheckJumpInputHoldTime()
+    {
+        if(Time.time >= jumpInputStartTime + inputHoldTime)
+        {
+            JumpInput = false;
+        }
+    }
 }
