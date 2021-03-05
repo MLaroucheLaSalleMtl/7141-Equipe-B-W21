@@ -12,11 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14cd32bc39e4cd243a6482318c13be01, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  speedX: 3
+  hp: 5
+  canTakeDamage: 0
+  speedX: 2.5
   smoothDamp: 0.1
-  zeroVelocity: {x: 9.049324e-13, y: 0}
-  jumpVelocity: 20
-  groundCheckRadius: 0.3
+  zeroVelocity: {x: 2.6907685, y: 0}
+  jumpVelocity: 14
+  amountOfJump: 1
+  groundCheckRadius: 0.1
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
+  whatIsDamagable:
+    serializedVersion: 2
+    m_Bits: 8

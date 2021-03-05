@@ -12,7 +12,7 @@ public class endlevel : MonoBehaviour
         code = GameManager.instance;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision) // fini le niveau et quit l'application
     {
         if (collision.CompareTag("Player"))
             code.LevelFinish();

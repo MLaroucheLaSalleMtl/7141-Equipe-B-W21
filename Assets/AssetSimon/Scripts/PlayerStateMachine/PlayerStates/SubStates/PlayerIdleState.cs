@@ -1,3 +1,7 @@
+/*
+ Ce script gere l'état Idle du personnage. C'est l'état par defaut du personnage. quand un autre état a terminer d'agir, le PlayerIdleState prend le relais
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,8 +19,7 @@ public class PlayerIdleState : PlayerGroundedState
 
     public override void Enter()
     {
-        base.Enter();
-        player.SetVelocityX(0f);
+        base.Enter();        
     }
 
     public override void Exit()
@@ -27,7 +30,8 @@ public class PlayerIdleState : PlayerGroundedState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if(xInput != 0)
+        player.SetVelocityX(0);
+        if (xInput != 0)//si le personnage bouge à gauche ou à droite, change son etat vers MoveState
         {
             stateMachine.ChangeState(player.MoveState);
         }

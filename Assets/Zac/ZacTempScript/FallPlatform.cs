@@ -23,17 +23,17 @@ public class FallPlatform : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))// si le player touche a la plateforme, la plateforme tombe
         {
             rb2d.bodyType = RigidbodyType2D.Dynamic;
             Invoke("Reposition", 2.0f);
         }
 
-        else if ((rb2d.bodyType == RigidbodyType2D.Dynamic) && (collision.gameObject.tag != "Player"))
+        else if ((rb2d.bodyType == RigidbodyType2D.Dynamic) && (collision.gameObject.tag != "Player")) // si la platforme touche quelque chose après quelle tombe, elle disparait
             this.gameObject.SetActive(false);
     }
 
-    private void Reposition()
+    private void Reposition() // repositionne la platforme a sa place initiale
     {
         this.transform.position = origine;
         this.gameObject.SetActive(true);

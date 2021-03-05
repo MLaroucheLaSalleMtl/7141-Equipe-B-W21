@@ -12,11 +12,10 @@ GameObject:
   - component: {fileID: 3230182754572623716}
   - component: {fileID: 3230182754572623717}
   - component: {fileID: 3230182754572623718}
-  - component: {fileID: 3230182754572623719}
   - component: {fileID: 3230182754572623736}
   m_Layer: 0
   m_Name: Glace
-  m_TagString: Untagged
+  m_TagString: Enemie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -138,18 +137,6 @@ PolygonCollider2D:
       - {x: 0.5, y: -0.5}
       - {x: 0.4998474, y: -0.37486458}
       - {x: 0.062423706, y: 0.4997921}
---- !u!114 &3230182754572623719
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3230182754572623737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d57c8d59cb5d7d4f8c7d827046e5a32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3230182754572623736
 MonoBehaviour:
   m_ObjectHideFlags: 0

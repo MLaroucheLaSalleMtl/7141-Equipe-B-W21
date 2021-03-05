@@ -11,13 +11,7 @@ public class TempDeath : MonoBehaviour
         code = GameManager.instance; 
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-            code.Death();
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)  // sa touche le player sa tue le player
     {
         if (collision.gameObject.CompareTag("Player"))
             code.Death();

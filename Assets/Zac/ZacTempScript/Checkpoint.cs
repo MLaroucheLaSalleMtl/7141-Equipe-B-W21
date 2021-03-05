@@ -18,7 +18,7 @@ public class Checkpoint : MonoBehaviour
         col2d = GetComponent<BoxCollider2D>();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision) //Lorsque le player touche au checkpoint(bonfire), il s'allume
     {
         if ((collision.CompareTag("Player")) && (col2d.isActiveAndEnabled))
         {

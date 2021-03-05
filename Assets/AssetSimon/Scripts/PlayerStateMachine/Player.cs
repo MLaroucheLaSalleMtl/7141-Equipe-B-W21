@@ -1,3 +1,12 @@
+/*
+ Donne les attribut au personage et execute les inputs qu'on lui envoi.
+Il s'occupe entre autre de changer la velocite, la direction, les collisions, 
+ 
+
+Coroutines,Unity Manuel,https://docs.unity3d.com/Manual/Coroutines.html 
+ */
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,35 +17,46 @@ public class Player : MonoBehaviour
     public PlayerStateMachine StateMachine { get; private set; } //reference vers le state machone
     public PlayerIdleState IdleState { get; private set; } //reference vers le Idle state
     public PlayerMoveState MoveState { get; private set; } //reference vers le Move state
-    public PlayerJumpState JumpState { get; private set; }
-    public PlayerInAirState InAirState { get; private set; }
-    public PlayerLandState LandState { get; private set; }
+    public PlayerJumpState JumpState { get; private set; }//reference vers le Jump state
+    public PlayerInAirState InAirState { get; private set; }//reference vers le InAir state
+    public PlayerLandState LandState { get; private set; }//reference vers le Land state
+    public PlayerKickState KickState { get; private set; }//reference vers le Kick state
+    public PlayerKnockBackState KnockBackState { get; private set; }//reference vers le knockback 
 
-    #endregion
+    #endregion //reference vers chaque etats de PlayerState et vers le stateMachine
 
     #region Components
-    [SerializeField] private PlayerData playerData;
-    public PlayerMovement InputMove { get; private set; }//reference vers le Idle state
-    public Animator Anim { get; private set; }
-    public Rigidbody2D Rigid { get; private set; }
+     public PlayerData playerData; //reference vers le player
+    public PlayerMovement InputMove { get; private set; }//reference vers PlayerMouvement, qui recoit l'input du input system
+    public Animator Anim { get; private set; }//reference vers l'animator
+    public Rigidbody2D Rigid { get; private set; }//reference vers le rigidBody2d
     //public Vector2 CurrentVelocity { get; private set; }
     #endregion
 
     #region Check Transforms
-    [SerializeField] private Transform groundCheck;
+    [SerializeField] private Transform groundCheck;//reference vers le ground check
+    [SerializeField] private GameObject kickHitbox;//reference vers le hitbox du kick
     #endregion
 
     #region Other Variables
-    public int FacingDirection { get; private set; }
-    public Vector2 workspace;
-    public Vector2 CurrentVelocity { get; private set;}
+    public int FacingDirection { get; private set; } //la direction vers laquelle le personnage face
+    public Vector2 workspace;//vecteur pour la vitesse ciblé
+    public Vector2 CurrentVelocity { get; private set;}//vecteur pour la vitesse courante
+
+    [Header("Invincibility variables")]
+    public Color flashColor; //couleur du flash
+    public Color baseColor;//couleur de base
+    public float flashDuration;//durée du flash
+    public int numOfFlashes;//nombre de flash    
+    public SpriteRenderer mySprite;//reference vers le sprite renderer
+ 
 
     #endregion
-
 
     #region Unity CallBack Functions
     private void Awake()
     {
+        //initialisation du state Machine et des états
         StateMachine = new PlayerStateMachine();
 
         IdleState = new PlayerIdleState(this,StateMachine,playerData,"idle");
@@ -44,49 +64,95 @@ public class Player : MonoBehaviour
         JumpState = new PlayerJumpState(this, StateMachine, playerData, "inAir");
         InAirState = new PlayerInAirState(this, StateMachine, playerData, "inAir");
         LandState = new PlayerLandState(this, StateMachine, playerData, "land");
+        KickState = new PlayerKickState(this, StateMachine, playerData, "kick");
+        KnockBackState = new PlayerKnockBackState(this, StateMachine, playerData, "knockback");
     }
 
+    void OnTriggerStay2D(Collider2D collision)//pour detecter la colision avec un collider qui endommage le player
+    {
+        if (playerData.canTakeDamage)
+        {
+            if (collision.CompareTag("Enemie"))//verifie le tag du collider touché
+            {
+                ReceiveDamage(1);//recoit des degat
+                StartCoroutine(FlashCo());//devient invulnerable
+            }
+            
+        }
+
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (playerData.canTakeDamage)//si le personnage peu prendre des degat
+        {
+            if (collision.CompareTag("Projectile"))//verifie le tag du collider touche
+            {
+                ReceiveDamage(1);//recoit les degat
+                StartCoroutine(FlashCo());//devient invulnerable
+            }
+        }
+    }
     private void Start()
     {
-        Anim = GetComponent<Animator>();
-        InputMove = GetComponent<PlayerMovement>();
-        Rigid = GetComponent<Rigidbody2D>();
-
+        Anim = GetComponent<Animator>();//cache l'animator
+        InputMove = GetComponent<PlayerMovement>();//cache le input handler
+        Rigid = GetComponent<Rigidbody2D>();//cache le rigidbody
+        playerData.hp = 5;//set le nombre de hp du joueur a 5
+        playerData.canTakeDamage = true;
         FacingDirection = 1;
 
-        StateMachine.initialize(IdleState);
+        StateMachine.initialize(IdleState);//initialise letat de base a IdleState
+
     }
     private void Update()
     {
-        CurrentVelocity = Rigid.velocity;
-        StateMachine.CurrentState.LogicUpdate();
+        CurrentVelocity = Rigid.velocity;//vitesse courante
+        StateMachine.CurrentState.LogicUpdate();//methode de l'état courant qui est appeller a chaque frame
+        
     }
 
     private void FixedUpdate()
     {
-        StateMachine.CurrentState.PhysicsUpdate();
+        StateMachine.CurrentState.PhysicsUpdate();//methode de l'état courant qui est appeller a chaque intervalle constant
     }
     #endregion
 
     #region Set Functions
-    public void SetVelocityX(float velocity)//applique la vitesse au personnage
+    public void SetVelocityX(float velocity)//applique la vitesse au personnage horizontalement
     {
         workspace.Set(velocity * playerData.speedX, CurrentVelocity.y);
-        Rigid.velocity = Vector2.SmoothDamp(Rigid.velocity, workspace, ref playerData.zeroVelocity,playerData.smoothDamp );
+        Rigid.velocity = Vector2.SmoothDamp(Rigid.velocity, workspace, ref playerData.zeroVelocity, playerData.smoothDamp );
         CurrentVelocity = workspace;
     }
 
-    public void SetVelocityY(float velocity)
+    public void SetVelocityY(float velocity)//applique la vitesse au personnage verticalement
     {
         workspace.Set(CurrentVelocity.x, velocity);
         Rigid.velocity = workspace;
         CurrentVelocity = workspace;
     }
+
+    public void ReceiveDamage(int damage)
+    {
+        playerData.hp = playerData.hp - damage;
+        StateMachine.ChangeState(KnockBackState);
+    }
+
+    public void EnableKickHitbox()
+    {
+        kickHitbox.SetActive(true);
+    }
+    public void DisableKickHitbox()
+    {
+        kickHitbox.SetActive(false);
+    }
+
     #endregion
 
     #region Check Functions
 
-    public bool CheckifGrounded()
+    public bool CheckifGrounded()//retoure vrai 
     {
         return Physics2D.OverlapCircle(groundCheck.position,playerData.groundCheckRadius,playerData.whatIsGround);
     }
@@ -98,10 +164,10 @@ public class Player : MonoBehaviour
         }
     }
     #endregion
-    private void FlipCharacter()
+    private void FlipCharacter()//change la direction du personnage, soit gauche ou droite
     {
         FacingDirection *= -1;
-        transform.Rotate(0f, 180f, 0f);
+        transform.Rotate(0f, 180f, 0f);//fait une rotation sur l
     }
 
     private void AnimationTrigger()
@@ -113,4 +179,21 @@ public class Player : MonoBehaviour
     {
         StateMachine.CurrentState.AnimationFinishTrigger();
     }
+
+    //*Coroutine
+    private IEnumerator FlashCo()//coroutine pour que le personange change de couleur lorsqu'il est invulnerable
+    {
+        int temp = 0;
+        while(temp < numOfFlashes)
+        {
+            playerData.canTakeDamage = false;//le joueur est invulnerable
+            mySprite.color = flashColor;//la couleur du personnage change
+            yield return new WaitForSeconds(flashDuration);//temp dattente
+            mySprite.color = baseColor;//la couleur du personnage retourne vers l'original
+            yield return new WaitForSeconds(flashDuration);//temp dattente
+            temp++;
+        }
+        playerData.canTakeDamage = true;//le joueur redevient vulnerable
+    }
+
 }

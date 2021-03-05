@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance = null;
     #region Variable Player
     [SerializeField] private GameObject player;
-    [SerializeField] private int lives = 3;
+    [SerializeField] private PlayerData data;
     #endregion
 
     #region Variable Level
@@ -25,6 +25,10 @@ public class GameManager : MonoBehaviour
     private float time;
 
     [SerializeField] private Text live;
+
+    [SerializeField] private Text hp;
+
+    [SerializeField] private GameObject panelEnd;
     #endregion
 
     #region Awake, Start, Update
@@ -40,10 +44,14 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         checkpointID = 0;
-        lives = 3;
         checkpoint = startpoint.transform.position;
         player.transform.position = checkpoint;
-        time = 299;
+        time = 599;
+
+        data.hp = 5;
+        data.lives = 5;
+
+        panelEnd.SetActive(false);
 
         CheckpointIDCheck();
     }
@@ -52,15 +60,18 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         StartTime();
-        LiveText();
+        Text();
+        if (data.hp <= 0)
+            Death();
     }
     #endregion
 
-    public void Death()
+    public void Death() // si le player a 1 vie ou plus, il recommence au checkpoint, sinon il recommence du début
     {
-        if (lives > 1)
+        if (data.lives > 1)
         {
-            lives--;
+            data.lives--;
+            data.hp = 5;
             player.transform.position = checkpoint;
             CheckpointIDCheck();
         }
@@ -68,13 +79,19 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene("SceneZachary");
     }
 
-    public void LevelFinish()
+    public void LevelFinish()// active la fin du niveau
     {
-        Debug.Log("Nice Job");
+        panelEnd.SetActive(true);
+        Invoke("ByeBye", 2.0f);
+    }
+
+    public void ByeBye() // quit l'application
+    {
+        Application.Quit();
     }
 
     #region UIFunction
-    private void StartTime() //Source: https://www.youtube.com/watch?v=x-C95TuQtf0&ab_channel=N3KEN
+    private void StartTime() //crée le timer / Source: https://www.youtube.com/watch?v=x-C95TuQtf0&ab_channel=N3KEN
     {
         float t = time - Time.timeSinceLevelLoad;
 
@@ -84,12 +101,13 @@ public class GameManager : MonoBehaviour
         timer.text = "TIMER: " + minute + ":" + seconds;
     }
 
-    private void LiveText()
+    private void Text() // initi les textes
     {
-        live.text = "Lives: " + lives;
+        live.text = "Lives: " + data.lives;
+        hp.text = "HP: " + data.hp;
     }
     #endregion
-    public void GetCheckpoint(GameObject pos) 
+    public void GetCheckpoint(GameObject pos) // regarde quelle checkpoint il est rendue
     {
         checkpoint = pos.transform.position;
         hazardManager[checkpointID].SetActive(false);
@@ -97,7 +115,7 @@ public class GameManager : MonoBehaviour
         CheckpointIDCheck();
     }
 
-    private void CheckpointIDCheck()
+    private void CheckpointIDCheck() // Vérifie que seulement le checkpoint et ces hazard sois activer
     {
         for(int i = checkpointID; i < hazardManager.Count; i++)
         {

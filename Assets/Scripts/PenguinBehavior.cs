@@ -9,7 +9,6 @@ public class PenguinBehavior : MonoBehaviour
         Walking,
         Jumping,
         KnockBack,
-        Dead
     }
 
     private State currentState;
@@ -26,9 +25,6 @@ public class PenguinBehavior : MonoBehaviour
                 break;
             case State.KnockBack:
                 UpdateKnockbackState();
-                break;
-            case State.Dead:
-                UpdateDeadState();
                 break;
         }
     }
@@ -49,11 +45,14 @@ public class PenguinBehavior : MonoBehaviour
         wallCheck,
         jumpGroundCheck,
         playerCheck,
+        kickCheck,
         player;
 
     [SerializeField] private LayerMask whatIsGround;
     [SerializeField] private LayerMask whatIsPlayer;
+    [SerializeField] private LayerMask whatIsEnemy;
     [SerializeField] private Vector2 knockbackSpeed;
+    [SerializeField] private LayerMask whatIsKick;
 
     private float
         currentHealth,
@@ -61,11 +60,11 @@ public class PenguinBehavior : MonoBehaviour
         jumpStartTime;
 
     [SerializeField] float circleRadius;
+    [SerializeField] float kickRadius;
 
     private int
-        facingDirection,
-        damageDirection;
-
+        facingDirection;
+     
     private Vector2 movement;
     [SerializeField] Vector2 boxSize;
 
@@ -73,81 +72,82 @@ public class PenguinBehavior : MonoBehaviour
         groundDetected,
         wallDetected,
         playerDetected,
+        kickDetected,
+        enemyDetected,
         isGrounded;
 
     private GameObject alive;
     private Rigidbody2D aliveRb;
-    private Animator aliveAnim;
+  
+    public Color flashColor;
+    public Color baseColor;
+    public SpriteRenderer mySprite;
 
     private void Start()
     {
         alive = transform.Find("Alive").gameObject;
         aliveRb = alive.GetComponent<Rigidbody2D>();
-        aliveAnim = alive.GetComponent<Animator>();
+        
 
+        currentHealth = maxHealth;
         facingDirection = -1;
     }
 
     //--------WALKING STATE---------------------
-
-    private void EnterWalkingState()
-    {
-
-    }
 
     private void UpdateWalkingState()
     {
         groundDetected = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
         wallDetected = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, whatIsGround);
         playerDetected = Physics2D.OverlapCircle(playerCheck.position, circleRadius, whatIsPlayer);
+        kickDetected = Physics2D.OverlapCircle(kickCheck.position, kickRadius, whatIsKick);
+        enemyDetected = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, whatIsEnemy);
+        mySprite.color = baseColor;
 
-        if (!groundDetected || wallDetected)
+        if (!groundDetected || wallDetected || enemyDetected)
         {
             Flip();
         }
-        else if (playerDetected)
+        else if (kickDetected)
+        {
+             knockbackStartTime = Time.time;
+             ReceiveDamage(1);
+             SwitchState(State.KnockBack);
+         }
+        else if (playerDetected && !kickDetected)
         {
            isGrounded = Physics2D.OverlapBox(jumpGroundCheck.position, boxSize, 0, whatIsGround);
            jumpStartTime = Time.time;
            JumpAttack();
            SwitchState(State.Jumping);
-        } else
+        } 
+        else
         {
             movement.Set(movementSpeed * facingDirection, aliveRb.velocity.y);
             aliveRb.velocity = movement;
 
         }
     }
-
-    private void ExitWalkingState()
-    {
-
-    }
-
-    //--------  JUMPING STATE  -------------------------
-
-    private void EnterJumpingState()
-    {
-       
-    }
+    //----------Jumping State --------------------
 
     private void UpdateJumpingState()
     {
         movement.Set(movementSpeed * facingDirection, aliveRb.velocity.y);
         aliveRb.velocity = movement;
         isGrounded = Physics2D.OverlapBox(jumpGroundCheck.position, boxSize, 0, whatIsGround);
-        //JumpAttack();
-
-      if (Time.time >= jumpStartTime + JumpDuration && isGrounded)
+        kickDetected = Physics2D.OverlapCircle(kickCheck.position, kickRadius, whatIsKick);
+        
+        if (kickDetected)
+        {
+            knockbackStartTime = Time.time;
+            ReceiveDamage(1);
+            SwitchState(State.KnockBack);
+        } else
+        if (Time.time >= jumpStartTime + JumpDuration && isGrounded)
         {
             SwitchState(State.Walking);
         }
         
-    }
-
-    private void ExitJumpingState()
-    {
-         
     }
 
     void JumpAttack()
@@ -162,70 +162,25 @@ public class PenguinBehavior : MonoBehaviour
 
     //--------  KNOCKBACK STATE ------------------------
 
-
-    private void EnterKnockbackState()
-    {
-        knockbackStartTime = Time.time;
-        movement.Set(knockbackSpeed.x = damageDirection, knockbackSpeed.y);
-        aliveRb.velocity = movement;
-        aliveAnim.SetBool("Knockback", true);
-    }
-
     private void UpdateKnockbackState()
     {
+        mySprite.color = flashColor;
+
         if (Time.time >= knockbackStartTime + knockBackDuration)
         {
             SwitchState(State.Walking);
         }
     }
 
-    private void ExitKnockbackState()
-    {
-        aliveAnim.SetBool("Knockback", false);
-    }
-
-    //--------- DEAD STATE -------------------------------
-
-    private void EnterDeadState()
-    {
-        //Spawns dead effects
-        Destroy(gameObject);
-    }
-
-    private void UpdateDeadState()
-    {
-
-    }
-
-    private void ExitDeadState()
-    {
-
-    }
-
     //------OTHER FUNCTIONS ------------------------------
 
-    private void Damage(float[] attackDetails)
+    private void ReceiveDamage(int damage)
     {
-        currentHealth -= attackDetails[0];
-
-        if (attackDetails[1] > alive.transform.position.x)
+        currentHealth -= damage;
+        
+        if (currentHealth <= 0.0f)
         {
-            damageDirection = -1;
-        }
-        else
-        {
-            damageDirection = 1;
-        }
-
-        //Hit particle
-
-        if (currentHealth > 0.0f)
-        {
-            SwitchState(State.KnockBack);
-        }
-        else if (currentHealth <= 0.0f)
-        {
-            SwitchState(State.Dead);
+            Destroy(gameObject);
         }
     }
 
@@ -237,22 +192,6 @@ public class PenguinBehavior : MonoBehaviour
 
     private void SwitchState(State state)
     {
-        switch (currentState)
-        {
-            case State.Walking:
-                ExitWalkingState();
-                break;
-            case State.Jumping:
-                ExitJumpingState();
-                break;
-            case State.KnockBack:
-                ExitKnockbackState();
-                break;
-            case State.Dead:
-                ExitDeadState();
-                break;
-        }
-
         currentState = state;
     }
 
@@ -263,6 +202,9 @@ public class PenguinBehavior : MonoBehaviour
         Gizmos.DrawCube(jumpGroundCheck.position, boxSize);
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(playerCheck.position, circleRadius);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(kickCheck.position, kickRadius);
+
     }
 
 }

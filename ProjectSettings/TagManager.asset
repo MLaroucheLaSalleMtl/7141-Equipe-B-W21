@@ -7,6 +7,11 @@ TagManager:
   - Narwal
   - Death
   - Ground
+  - Projectile
+  - Ours
+  - Penguin
+  - KickBox
+  - Enemie
   layers:
   - Default
   - TransparentFX
@@ -16,8 +21,8 @@ TagManager:
   - UI
   - Ground
   - Player
-  - 
-  - 
+  - Kick
+  - Enemie
   - 
   - 
   - 
