@@ -22,20 +22,23 @@ public class Player : MonoBehaviour
     public PlayerLandState LandState { get; private set; }//reference vers le Land state
     public PlayerKickState KickState { get; private set; }//reference vers le Kick state
     public PlayerKnockBackState KnockBackState { get; private set; }//reference vers le knockback 
+    public PlayerThrowState ThrowState { get; private set; }//reference vers le knockback 
 
     #endregion //reference vers chaque etats de PlayerState et vers le stateMachine
 
     #region Components
-     public PlayerData playerData; //reference vers le player
+    public PlayerData playerData; //reference vers le player
     public PlayerMovement InputMove { get; private set; }//reference vers PlayerMouvement, qui recoit l'input du input system
     public Animator Anim { get; private set; }//reference vers l'animator
     public Rigidbody2D Rigid { get; private set; }//reference vers le rigidBody2d
     //public Vector2 CurrentVelocity { get; private set; }
+    public GameObject snowball;
     #endregion
 
     #region Check Transforms
     [SerializeField] private Transform groundCheck;//reference vers le ground check
-    [SerializeField] private GameObject kickHitbox;//reference vers le hitbox du kick
+    [SerializeField] private GameObject kickHitbox ;//reference vers le hitbox du kick
+    [SerializeField] private GameObject snowBallSpawn ;//reference vers le hitbox du kick
     #endregion
 
     #region Other Variables
@@ -49,8 +52,9 @@ public class Player : MonoBehaviour
     public float flashDuration;//durée du flash
     public int numOfFlashes;//nombre de flash    
     public SpriteRenderer mySprite;//reference vers le sprite renderer
- 
-
+    private Vector3 offsetL = new Vector3(-0.48f, 0.29f, 0);
+    private Vector3 offsetR = new Vector3(0.48f, 0.29f, 0);
+    
     #endregion
 
     #region Unity CallBack Functions
@@ -65,6 +69,7 @@ public class Player : MonoBehaviour
         InAirState = new PlayerInAirState(this, StateMachine, playerData, "inAir");
         LandState = new PlayerLandState(this, StateMachine, playerData, "land");
         KickState = new PlayerKickState(this, StateMachine, playerData, "kick");
+        ThrowState = new PlayerThrowState(this, StateMachine, playerData, "fire");
         KnockBackState = new PlayerKnockBackState(this, StateMachine, playerData, "knockback");
     }
 
@@ -141,6 +146,14 @@ public class Player : MonoBehaviour
 
     public void EnableKickHitbox()
     {
+        if (FacingDirection < 0)
+        {
+            kickHitbox.transform.position = this.transform.position + offsetL;
+        }
+        else
+        {
+            kickHitbox.transform.position = this.transform.position + offsetR;
+        }
         kickHitbox.SetActive(true);
     }
     public void DisableKickHitbox()
@@ -167,7 +180,7 @@ public class Player : MonoBehaviour
     private void FlipCharacter()//change la direction du personnage, soit gauche ou droite
     {
         FacingDirection *= -1;
-        transform.Rotate(0f, 180f, 0f);//fait une rotation sur l
+        transform.Rotate(0f, 180f, 0f);//fait une rotation de 180 degre sur l'axe des y
     }
 
     private void AnimationTrigger()
@@ -194,6 +207,12 @@ public class Player : MonoBehaviour
             temp++;
         }
         playerData.canTakeDamage = true;//le joueur redevient vulnerable
+    }
+
+    public void ThrowSnowBall()
+    {
+        GameObject projectileIns1 = Instantiate(snowball, snowBallSpawn.transform.position, Quaternion.identity); //instantiate le projectile
+        projectileIns1.GetComponent<Rigidbody2D>().AddForce(new Vector2(FacingDirection * 6, 5), ForceMode2D.Impulse);
     }
 
 }

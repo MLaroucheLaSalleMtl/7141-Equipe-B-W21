@@ -15,6 +15,7 @@ public class PlayerGroundedState : PlayerState
 
     private bool JumpInput;//input pour sauter
     private bool Kickinput;//input pour coup de pied
+    private bool Fireinput;//input pour coup de pied
 
     private bool isGrounded;//pour determiner si le personnage touche au sol
     public PlayerGroundedState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
@@ -25,7 +26,6 @@ public class PlayerGroundedState : PlayerState
     {
         base.DoCheck();
 
-        isGrounded = player.CheckifGrounded();   //verifie i le personnage touche au sol
         player.JumpState.ResetAmountOfJumpLeft();  //redonne la possibilite au personnage de sauter
     }
 
@@ -43,10 +43,17 @@ public class PlayerGroundedState : PlayerState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+        isGrounded = player.CheckifGrounded();   //verifie i le personnage touche au sol
 
         xInput = player.InputMove.NormInputX;
         JumpInput = player.InputMove.JumpInput;
         Kickinput = player.InputMove.KickInput;
+        Fireinput = player.InputMove.FireInput;
+        if (Fireinput)
+        {
+            player.InputMove.UseFireInput();
+            stateMachine.ChangeState(player.ThrowState);
+        }
         if (Kickinput)//si je joueur kick, utilise le kickInput et change l'etat du personnage vers l'etat PlayerKick 
         {
             player.InputMove.UseKickInput();

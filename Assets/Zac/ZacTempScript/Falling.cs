@@ -7,7 +7,7 @@ public class Falling : MonoBehaviour
     private Rigidbody2D rb2d;
     private LayerMask mask;
     private Vector2 origine;
-
+    private Animator anim;
 
     // Start is called before the first frame update
     void Start()
@@ -15,6 +15,8 @@ public class Falling : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         rb2d.simulated = false;
         origine = this.transform.position;
+        anim = GetComponentInParent<Animator>();
+        anim.enabled = true;
     }
 
     // Update is called once per frame
@@ -25,13 +27,13 @@ public class Falling : MonoBehaviour
         hit = Physics2D.Raycast(this.transform.position, Vector2.down, 30, mask);
         Debug.DrawRay(this.transform.position, Vector2.down);
 
+        InvokeRepeating("Idle", 0.1f, 5.0f);
+        InvokeRepeating("NotIdle", 2.0f, 5.0f);
+
         if (hit.collider.CompareTag("Player"))
         {
             rb2d.simulated = true;
-        }
-        else
-        {
-
+            anim.enabled = false;
         }
     }
 
@@ -40,5 +42,17 @@ public class Falling : MonoBehaviour
         rb2d.simulated = false;
         this.transform.position = origine;
         this.gameObject.SetActive(true);
+        anim.enabled = true;
     }
+
+    private void Idle()
+    {
+        anim.SetBool("Idle", true);
+    }
+
+    private void NotIdle()
+    {
+        anim.SetBool("Idle", false);
+    }
+
 }

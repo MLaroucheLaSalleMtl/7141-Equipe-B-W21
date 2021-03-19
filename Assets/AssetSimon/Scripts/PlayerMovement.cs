@@ -16,15 +16,18 @@ public class PlayerMovement : MonoBehaviour
     public int NormInputY { get; private set; } //le input normaliser pour le deplacement vertical 
 
     public bool JumpInput { get; private set; }//le input pour le saut
-    public bool KickInput { get; private set; }//le input pour l'attaque
+    public bool KickInput { get; private set; }//le input pour l'attaque corp a corp
+    public bool FireInput { get; private set; }//le input pour l'attaque a distance
 
     [SerializeField] private float inputHoldTime = 0.2f;//Temp de latence pour activer le saut
 
     private float jumpInputStartTime;//temp auquel on active le jump input
+    private float fireInputStartTime;//temp auquel on active le jump input
 
     private void Update()
     {
         CheckJumpInputHoldTime();
+        CheckFireInputHoldTime();
     }
     public void OnMove(InputAction.CallbackContext context)//method envoyer a l'input system
     {
@@ -45,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void UseJumpInput() => JumpInput = false;//pour utiliser le saut
     public void UseKickInput() => KickInput = false;//pour utiliser le coup de pied
+    public void UseFireInput() => FireInput = false;//pour utiliser le coup de pied
 
     private void CheckJumpInputHoldTime()//verifie si le temp de latence du saut est plus petit que le temp de latence precedement declarer. Pour permettre au jooueur de sauter 0.2 sec apres avoir quitter le sol
     {
@@ -53,7 +57,13 @@ public class PlayerMovement : MonoBehaviour
             JumpInput = false;
         }
     }
-
+    private void CheckFireInputHoldTime()//verifie si le temp de latence du saut est plus petit que le temp de latence precedement declarer. Pour permettre au jooueur de sauter 0.2 sec apres avoir quitter le sol
+    {
+        if (Time.time >= fireInputStartTime + inputHoldTime)
+        {
+            FireInput = false;
+        }
+    }
     public void OnKick(InputAction.CallbackContext context)//method envoyer a l'input system
     {
         if (context.started)
@@ -61,4 +71,14 @@ public class PlayerMovement : MonoBehaviour
             KickInput = true;
         }
     }
+
+    public void OnFire(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            FireInput = true;
+            fireInputStartTime = Time.time;
+        }
+    }
+
 }
