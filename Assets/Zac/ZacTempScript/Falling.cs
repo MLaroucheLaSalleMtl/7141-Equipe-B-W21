@@ -8,6 +8,8 @@ public class Falling : MonoBehaviour
     private LayerMask mask;
     private Vector2 origine;
     private Animator anim;
+    private Collider2D trigger;
+    [SerializeField] private bool canIdle = false;
 
     // Start is called before the first frame update
     void Start()
@@ -17,6 +19,7 @@ public class Falling : MonoBehaviour
         origine = this.transform.position;
         anim = GetComponentInParent<Animator>();
         anim.enabled = true;
+        trigger = GetComponent<BoxCollider2D>();
     }
 
     // Update is called once per frame
@@ -27,13 +30,21 @@ public class Falling : MonoBehaviour
         hit = Physics2D.Raycast(this.transform.position, Vector2.down, 30, mask);
         Debug.DrawRay(this.transform.position, Vector2.down);
 
-        InvokeRepeating("Idle", 0.1f, 5.0f);
-        InvokeRepeating("NotIdle", 2.0f, 5.0f);
+        if (canIdle)
+        {
+            InvokeRepeating("Idle", 0.1f, 5.0f);
+            InvokeRepeating("NotIdle", 2.0f, 5.0f);
+        }
 
         if (hit.collider.CompareTag("Player"))
         {
             rb2d.simulated = true;
             anim.enabled = false;
+        }
+
+        else
+        {
+
         }
     }
 
@@ -55,4 +66,15 @@ public class Falling : MonoBehaviour
         anim.SetBool("Idle", false);
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+            canIdle = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+            canIdle = false;
+    }
 }

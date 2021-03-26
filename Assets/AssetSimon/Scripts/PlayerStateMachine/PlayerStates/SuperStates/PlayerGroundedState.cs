@@ -49,9 +49,9 @@ public class PlayerGroundedState : PlayerState
         JumpInput = player.InputMove.JumpInput;
         Kickinput = player.InputMove.KickInput;
         Fireinput = player.InputMove.FireInput;
-        if (Fireinput)
+        if (Fireinput && playerData.snowBallCount>0)
         {
-            player.InputMove.UseFireInput();
+            //player.InputMove.UseFireInput();
             stateMachine.ChangeState(player.ThrowState);
         }
         if (Kickinput)//si je joueur kick, utilise le kickInput et change l'etat du personnage vers l'etat PlayerKick 

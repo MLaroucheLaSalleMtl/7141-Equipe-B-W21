@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 /// Pour cette partie du code, je me suis basé sur la vidéo #1 dans les références puis ensuite ma logique pour
 /// faire en sorte que tout fonctionne bien.
@@ -73,6 +74,14 @@ public class NarwalBehavior : MonoBehaviour
     public Color flashColor; //Couleur du personnage lorsqu'il reçoit des dommages
     public Color baseColor;  //Couleur normal du personnage
     public SpriteRenderer mySprite; //Sprite du personnage
+    public HealthBarBehavior healthBar;
+
+    static System.Random rand = new System.Random();
+
+    [Header("Random Objects")]
+    public GameObject snowballs;
+    public GameObject coins;
+    public GameObject iceCream;
 
     private void Start()
     {
@@ -80,6 +89,7 @@ public class NarwalBehavior : MonoBehaviour
         aliveRb = alive.GetComponent<Rigidbody2D>(); //Prend le component RigidBody2D
         currentHealth = maxHealth; //Initialise le currentHealth au maxHealth
         facingDirection = -1; //La direction initiale du Narwal est -1
+        healthBar.SetHealth(currentHealth, maxHealth);
     }
 
     //--------WALKING STATE---------------------
@@ -126,10 +136,11 @@ public class NarwalBehavior : MonoBehaviour
     private void ReceiveDamage(int damage) //Fonction qui reçoit les dégats
     {
         currentHealth -= damage;           //currentHealth diminue
-
+        healthBar.SetHealth(currentHealth, maxHealth);
         if (currentHealth <= 0.0f)         //Si le currentHealth est égale ou plus bas que zéro
         {
             Destroy(gameObject);           //Appel la fonction Destroy()
+            RandomObject();
         }
        
     }
@@ -138,6 +149,24 @@ public class NarwalBehavior : MonoBehaviour
     {
         facingDirection *= -1; 
         alive.transform.Rotate(0.0f, 180.0f, 0.0f); 
+    }
+
+     void RandomObject()
+    {
+        int number = rand.Next(2);
+
+        if (number == 0)
+        {
+            Instantiate(snowballs, aliveRb.transform.position, Quaternion.identity); 
+        }
+        else if ( number == 1)
+        {
+            Instantiate(coins, aliveRb.transform.position, Quaternion.identity);
+        }
+        else if (number == 2)
+        {
+            Instantiate(iceCream, transform.position, Quaternion.identity);
+        }
     }
 
     private void SwitchState(State state) //Fonction qui change de State

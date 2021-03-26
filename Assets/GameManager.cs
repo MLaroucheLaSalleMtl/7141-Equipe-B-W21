@@ -26,9 +26,13 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Text live;
 
-    [SerializeField] private Text hp;
+    [SerializeField] private Image hp;
+
+    [SerializeField] private Text snowBallText;
 
     [SerializeField] private GameObject panelEnd;
+
+    [SerializeField] private GameObject panelPlayerUI;
     #endregion
 
     #region Awake, Start, Update
@@ -49,9 +53,10 @@ public class GameManager : MonoBehaviour
         time = 599;
 
         data.hp = 5;
-        data.lives = 5;
+        data.lives = 5;        
 
         panelEnd.SetActive(false);
+        panelPlayerUI.SetActive(true);
 
         CheckpointIDCheck();
     }
@@ -76,7 +81,7 @@ public class GameManager : MonoBehaviour
             CheckpointIDCheck();
         }
         else
-            SceneManager.LoadScene("SceneZachary");
+            SceneManager.LoadScene("Level1");
     }
 
     public void LevelFinish()// active la fin du niveau
@@ -96,15 +101,19 @@ public class GameManager : MonoBehaviour
         float t = time - Time.timeSinceLevelLoad;
 
         string minute = ((int)t / 60).ToString();
-        string seconds = (t % 60).ToString("f0");
+        string seconds = (t % 60).ToString("f00");
 
-        timer.text = "TIMER: " + minute + ":" + seconds;
+        timer.text = "X " + minute + ":" + seconds;
     }
 
     private void Text() // initi les textes
     {
-        live.text = "Lives: " + data.lives;
-        hp.text = "HP: " + data.hp;
+        live.text = "X " + data.lives;
+        
+        snowBallText.text = "X " + data.snowBallCount;
+
+        hp.rectTransform.sizeDelta = new Vector2(data.hp*(288f / 5), 32f);
+
     }
     #endregion
     public void GetCheckpoint(GameObject pos) // regarde quelle checkpoint il est rendue

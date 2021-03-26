@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   hp: 5
-  canTakeDamage: 0
+  lives: 5
+  canTakeDamage: 1
+  snowBallCount: 10
   speedX: 2.5
   smoothDamp: 0.1
-  zeroVelocity: {x: 2.6907685, y: 0}
+  zeroVelocity: {x: -0.06304161, y: 0}
   jumpVelocity: 14
   amountOfJump: 1
   groundCheckRadius: 0.1

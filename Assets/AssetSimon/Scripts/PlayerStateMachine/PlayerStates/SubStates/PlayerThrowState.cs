@@ -33,6 +33,7 @@ public class PlayerThrowState : PlayerAbilityState
     public override void Exit()
     {
         base.Exit();
+        player.InputMove.UseFireInput();
     }
 
     public override void LogicUpdate()

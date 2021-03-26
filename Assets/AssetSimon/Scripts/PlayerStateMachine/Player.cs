@@ -87,8 +87,21 @@ public class Player : MonoBehaviour
 
     }
 
+
     void OnTriggerEnter2D(Collider2D collision)
-    {
+    {   
+        if (collision.CompareTag("SnowBallStack"))
+        {
+            playerData.snowBallCount += 10;
+        }
+        if (collision.CompareTag("IceCream"))
+        {
+            playerData.hp = playerData.maxHp;
+        }
+        if (collision.CompareTag("Coin"))
+        {
+            playerData.score += 100;
+        }
         if (playerData.canTakeDamage)//si le personnage peu prendre des degat
         {
             if (collision.CompareTag("Projectile"))//verifie le tag du collider touche
@@ -97,6 +110,7 @@ public class Player : MonoBehaviour
                 StartCoroutine(FlashCo());//devient invulnerable
             }
         }
+       
     }
     private void Start()
     {
@@ -105,6 +119,7 @@ public class Player : MonoBehaviour
         Rigid = GetComponent<Rigidbody2D>();//cache le rigidbody
         playerData.hp = 5;//set le nombre de hp du joueur a 5
         playerData.canTakeDamage = true;
+        playerData.snowBallCount = 10;
         FacingDirection = 1;
 
         StateMachine.initialize(IdleState);//initialise letat de base a IdleState
@@ -213,6 +228,7 @@ public class Player : MonoBehaviour
     {
         GameObject projectileIns1 = Instantiate(snowball, snowBallSpawn.transform.position, Quaternion.identity); //instantiate le projectile
         projectileIns1.GetComponent<Rigidbody2D>().AddForce(new Vector2(FacingDirection * 6, 5), ForceMode2D.Impulse);
+        playerData.snowBallCount--;
     }
 
 }

@@ -82,14 +82,14 @@ public class PenguinBehavior : MonoBehaviour
     public Color flashColor;
     public Color baseColor;
     public SpriteRenderer mySprite;
+    public HealthBarBehavior healthBar;
 
     private void Start()
     {
         alive = transform.Find("Alive").gameObject;
         aliveRb = alive.GetComponent<Rigidbody2D>();
-        
-
         currentHealth = maxHealth;
+        healthBar.SetHealth(currentHealth, maxHealth);
         facingDirection = -1;
     }
 
@@ -177,7 +177,8 @@ public class PenguinBehavior : MonoBehaviour
     private void ReceiveDamage(int damage)
     {
         currentHealth -= damage;
-        
+        healthBar.SetHealth(currentHealth, maxHealth);
+
         if (currentHealth <= 0.0f)
         {
             Destroy(gameObject);

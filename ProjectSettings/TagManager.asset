@@ -12,6 +12,9 @@ TagManager:
   - Penguin
   - KickBox
   - Enemie
+  - SnowBallStack
+  - IceCream
+  - Coin
   layers:
   - Default
   - TransparentFX

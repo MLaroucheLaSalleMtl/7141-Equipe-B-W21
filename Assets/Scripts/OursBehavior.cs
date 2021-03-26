@@ -19,6 +19,7 @@ public class OursBehavior : MonoBehaviour
     private GameObject alive;     //GameObject Alive
 
     private int facingDirection;  //Direction de l'ours
+    private int forceLancer = 6;
 
     private Transform player;     //Joueur
 
@@ -44,6 +45,7 @@ public class OursBehavior : MonoBehaviour
     public Color flashColor;  
     public Color baseColor;
     public SpriteRenderer mySprite;
+    public HealthBarBehavior healthBar;
 
     void Start()
     {
@@ -51,6 +53,7 @@ public class OursBehavior : MonoBehaviour
         alive = transform.Find("Alive").gameObject;
         facingDirection = -1;
         currentHealth = maxHealth;
+        healthBar.SetHealth(currentHealth, maxHealth);
         timeBwShots = startTimeBtwShots; //Initialise le timebtwShots a la durée entre chaque tirs
     }
 
@@ -59,15 +62,8 @@ public class OursBehavior : MonoBehaviour
         playerDetected = Physics2D.OverlapCircle(playerCheck.position, circleRadius, whatIsPlayer); //Regarde s'il y a un player
         kickDetected = Physics2D.OverlapCircle(kickCheck.position, kickRadius, whatIsKick);         //Regarde s'il y a un kick
 
-        if (timeBwShots <= 0 && playerDetected) //S'il le timeBtwShots <= 0 et que le player est detected
-        {
-            Instantiate(projectile, transform.position, Quaternion.identity); //instantiate le projectile
-            timeBwShots = startTimeBtwShots;        //Initialise le timebtwShots a la durée entre chaque tirs
-        }
-        else
-        {
-            timeBwShots -= Time.deltaTime; //Le timebtwShots diminue de 1 a chaque seconde
-        }
+        Shoot();
+        TourneVersJoueur();
 
         if (kickDetected && Time.time >= knockBackStartTime + knockBackDuration) //S'il detect un kick et il n'est pas "knockback"
         {
@@ -79,15 +75,6 @@ public class OursBehavior : MonoBehaviour
             mySprite.color = baseColor; //L'ours reprend sa couleur initiale
         }
 
-        //if else qui regarde la position du joueur et qui change la direction de l'ours  pour qu'il regarde le joueur
-        if (player.position.x > transform.position.x && facingDirection == -1)
-        {
-            Flip();
-        }
-        else if (player.position.x < transform.position.x && facingDirection == 1)
-        {
-            Flip();
-        }
     }
 
     private void OnDrawGizmos()
@@ -104,8 +91,9 @@ public class OursBehavior : MonoBehaviour
         knockBackStartTime = Time.time;
         mySprite.color = flashColor;
         currentHealth -= damage;
+        healthBar.SetHealth(currentHealth, maxHealth);
 
-        if(currentHealth <= 0)
+        if (currentHealth <= 0)
         {
             Destroy(gameObject);
         }
@@ -116,4 +104,32 @@ public class OursBehavior : MonoBehaviour
         facingDirection *= -1;
         alive.transform.Rotate(0.0f, 180.0f, 0.0f);
     }
+
+    private void TourneVersJoueur()
+    {
+        //if else qui regarde la position du joueur et qui change la direction de l'ours  pour qu'il regarde le joueur
+        if (player.position.x > transform.position.x && facingDirection == -1)
+        {
+            Flip();
+        }
+        else if (player.position.x < transform.position.x && facingDirection == 1)
+        {
+            Flip();
+        }
+    }
+
+    private void Shoot()
+    {
+        if (timeBwShots <= 0 && playerDetected) //S'il le timeBtwShots <= 0 et que le player est detected
+        {
+            GameObject projectileIns=Instantiate(projectile, transform.position, Quaternion.identity); //instantiate le projectile
+            projectileIns.GetComponent<Rigidbody2D>().AddForce(new Vector2(facingDirection * forceLancer, 5), ForceMode2D.Impulse);
+            timeBwShots = startTimeBtwShots;        //Initialise le timebtwShots a la durée entre chaque tirs
+        }
+        else
+        {
+            timeBwShots -= Time.deltaTime; //Le timebtwShots diminue de 1 a chaque seconde
+        }
+    }
+
 }

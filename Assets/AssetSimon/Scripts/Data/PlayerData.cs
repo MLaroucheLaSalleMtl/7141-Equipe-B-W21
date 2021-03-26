@@ -10,9 +10,12 @@ using UnityEngine;
 public class PlayerData : ScriptableObject
 {
     [Header("Main stats")]//variables stats du joueur
-    public int hp = 5;
+    public int maxHp = 5;
+    [Range(0,5)]public int hp = 5;
     public int lives = 3;
     public bool canTakeDamage = true;
+    [Range(0,50)] public int snowBallCount = 10;
+    public int score = 0;
 
     [Header("Move State")]//variable de mouvement horizontale
     [Range( 0.5f,10f)]public float speedX = 5f;
