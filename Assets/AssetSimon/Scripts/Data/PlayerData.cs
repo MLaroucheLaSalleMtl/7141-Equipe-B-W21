@@ -22,6 +22,11 @@ public class PlayerData : ScriptableObject
     [Range( 0.01f,1f)]public float smoothDamp = 0.1f;
     public Vector2 zeroVelocity = Vector2.zero;
 
+    [Header("Climb State")]
+    public float climbSpdX = 2.5f;
+    public float climbSpdY = 2.5f;
+    [Range(0.01f, 1f)] public float climbSmoothDamp = 0.1f;
+
     [Header("Jump State")]//variable de mouvement vertical
     [Range(0.5f,50f)]public float jumpVelocity = 15f;
     public int amountOfJump = 1;

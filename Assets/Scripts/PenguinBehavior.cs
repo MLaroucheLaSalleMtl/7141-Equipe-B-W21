@@ -84,6 +84,13 @@ public class PenguinBehavior : MonoBehaviour
     public SpriteRenderer mySprite;
     public HealthBarBehavior healthBar;
 
+    static System.Random rand = new System.Random();
+
+    [Header("Random Objects")]
+    public GameObject snowballs;
+    public GameObject coins;
+    public GameObject iceCream;
+
     private void Start()
     {
         alive = transform.Find("Alive").gameObject;
@@ -182,6 +189,7 @@ public class PenguinBehavior : MonoBehaviour
         if (currentHealth <= 0.0f)
         {
             Destroy(gameObject);
+            RandomObject();
         }
     }
 
@@ -189,6 +197,24 @@ public class PenguinBehavior : MonoBehaviour
     {
         facingDirection *= -1;
         alive.transform.Rotate(0.0f, 180.0f, 0.0f);
+    }
+
+    void RandomObject()
+    {
+        int number = rand.Next(3);
+
+        if (number == 0)
+        {
+            Instantiate(snowballs, aliveRb.transform.position, Quaternion.identity);
+        }
+        else if (number == 1)
+        {
+            Instantiate(coins, aliveRb.transform.position, Quaternion.identity);
+        }
+        else if (number == 2)
+        {
+            Instantiate(iceCream, aliveRb.transform.position, Quaternion.identity);
+        }
     }
 
     private void SwitchState(State state)

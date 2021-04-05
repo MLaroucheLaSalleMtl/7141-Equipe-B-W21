@@ -153,7 +153,7 @@ public class NarwalBehavior : MonoBehaviour
 
      void RandomObject()
     {
-        int number = rand.Next(2);
+        int number = rand.Next(3);
 
         if (number == 0)
         {
@@ -165,7 +165,7 @@ public class NarwalBehavior : MonoBehaviour
         }
         else if (number == 2)
         {
-            Instantiate(iceCream, transform.position, Quaternion.identity);
+            Instantiate(iceCream, aliveRb.transform.position, Quaternion.identity);
         }
     }
 

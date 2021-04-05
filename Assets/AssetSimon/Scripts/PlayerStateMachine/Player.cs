@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     public PlayerKickState KickState { get; private set; }//reference vers le Kick state
     public PlayerKnockBackState KnockBackState { get; private set; }//reference vers le knockback 
     public PlayerThrowState ThrowState { get; private set; }//reference vers le knockback 
+    public PlayerClimbState ClimbState { get; private set; }//reference vers le knockback 
 
     #endregion //reference vers chaque etats de PlayerState et vers le stateMachine
 
@@ -70,7 +71,9 @@ public class Player : MonoBehaviour
         LandState = new PlayerLandState(this, StateMachine, playerData, "land");
         KickState = new PlayerKickState(this, StateMachine, playerData, "kick");
         ThrowState = new PlayerThrowState(this, StateMachine, playerData, "fire");
+        ClimbState = new PlayerClimbState(this, StateMachine, playerData, "climb");
         KnockBackState = new PlayerKnockBackState(this, StateMachine, playerData, "knockback");
+
     }
 
     void OnTriggerStay2D(Collider2D collision)//pour detecter la colision avec un collider qui endommage le player

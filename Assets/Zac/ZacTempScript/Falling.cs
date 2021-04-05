@@ -27,7 +27,7 @@ public class Falling : MonoBehaviour
     {
         RaycastHit2D hit;
         mask = LayerMask.GetMask("Player");
-        hit = Physics2D.Raycast(this.transform.position, Vector2.down, 30, mask);
+        hit = Physics2D.Raycast(this.transform.position, Vector2.down, 100, mask);
         Debug.DrawRay(this.transform.position, Vector2.down);
 
         if (canIdle)
@@ -40,11 +40,6 @@ public class Falling : MonoBehaviour
         {
             rb2d.simulated = true;
             anim.enabled = false;
-        }
-
-        else
-        {
-
         }
     }
 

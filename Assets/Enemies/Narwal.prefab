@@ -312,6 +312,9 @@ MonoBehaviour:
   baseColor: {r: 1, g: 1, b: 1, a: 0.99607843}
   mySprite: {fileID: 1650233000060108450}
   healthBar: {fileID: 8266864984887705156}
+  snowballs: {fileID: 5029602141994876350, guid: b269877259d6cc148a7a28943354638b, type: 3}
+  coins: {fileID: 2425765503407157854, guid: 48674851d17569541a36b1ce0b83b85a, type: 3}
+  iceCream: {fileID: 6329862904298456148, guid: 5f945d736c6729b428638a1c874c6190, type: 3}
 --- !u!61 &1650233001359667136
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -451,11 +454,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1209122329806212713, guid: cba8e18c40fa6934da6253c53e1bd0a8, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1209122329806212713, guid: cba8e18c40fa6934da6253c53e1bd0a8, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cba8e18c40fa6934da6253c53e1bd0a8, type: 3}

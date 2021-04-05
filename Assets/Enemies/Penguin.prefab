@@ -167,6 +167,9 @@ MonoBehaviour:
   baseColor: {r: 1, g: 1, b: 1, a: 1}
   mySprite: {fileID: 5159073447559723817}
   healthBar: {fileID: 5188605870949063794}
+  snowballs: {fileID: 5029602141994876350, guid: b269877259d6cc148a7a28943354638b, type: 3}
+  coins: {fileID: 2425765503407157854, guid: 48674851d17569541a36b1ce0b83b85a, type: 3}
+  iceCream: {fileID: 6329862904298456148, guid: 5f945d736c6729b428638a1c874c6190, type: 3}
 --- !u!1 &5159073447559723819
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -26,6 +27,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Text live;
 
+    [SerializeField] private Text score;
+
     [SerializeField] private Image hp;
 
     [SerializeField] private Text snowBallText;
@@ -33,7 +36,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject panelEnd;
 
     [SerializeField] private GameObject panelPlayerUI;
+
+    [SerializeField] private GameObject panelPause;
+    
+    [SerializeField] private GameObject selectMenu;
+    
+    [SerializeField] private Selectable defaultBtn;
+
+
+
+    
     #endregion
+
+    public GameObject Player { get => player; set => player = value; }
 
     #region Awake, Start, Update
     private void Awake()
@@ -46,18 +61,18 @@ public class GameManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {        
         checkpointID = 0;
         checkpoint = startpoint.transform.position;
-        player.transform.position = checkpoint;
+        Player.transform.position = checkpoint;
         time = 599;
 
         data.hp = 5;
-        data.lives = 5;        
-
+        data.lives = 5;
+        data.score = 0;
         panelEnd.SetActive(false);
         panelPlayerUI.SetActive(true);
-
+        panelPause.SetActive(false);
         CheckpointIDCheck();
     }
 
@@ -77,7 +92,7 @@ public class GameManager : MonoBehaviour
         {
             data.lives--;
             data.hp = 5;
-            player.transform.position = checkpoint;
+            Player.transform.position = checkpoint;
             CheckpointIDCheck();
         }
         else
@@ -101,7 +116,7 @@ public class GameManager : MonoBehaviour
         float t = time - Time.timeSinceLevelLoad;
 
         string minute = ((int)t / 60).ToString();
-        string seconds = (t % 60).ToString("f00");
+        string seconds = (t % 60).ToString("00");
 
         timer.text = "X " + minute + ":" + seconds;
     }
@@ -113,6 +128,8 @@ public class GameManager : MonoBehaviour
         snowBallText.text = "X " + data.snowBallCount;
 
         hp.rectTransform.sizeDelta = new Vector2(data.hp*(288f / 5), 32f);
+
+        score.text = data.score.ToString("00000000");
 
     }
     #endregion
@@ -132,4 +149,34 @@ public class GameManager : MonoBehaviour
         }
         hazardManager[checkpointID].SetActive(true);
     }
+
+
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if (!panelPause.activeSelf && !selectMenu.activeSelf)
+            {
+                selectMenu.SetActive(true);
+                panelPause.SetActive(true);
+                defaultBtn.Select();
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                selectMenu.SetActive(false);
+                panelPause.SetActive(false);
+                Time.timeScale = 1f;
+            }
+        }
+        
+    }
+
+    public void Resume()
+    {
+        selectMenu.SetActive(false);
+        panelPause.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
 }

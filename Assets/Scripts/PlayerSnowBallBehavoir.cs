@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class PlayerSnowBallBehavoir : MonoBehaviour
 {
+
     // Start is called before the first frame update
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.collider.CompareTag("Ground"))
+        if(collision.CompareTag("Ground") || collision.CompareTag("Enemie"))
         Destroy(this.gameObject);
     }
 

@@ -7,7 +7,7 @@ public class rolling : MonoBehaviour
     private Collider2D trigger;
     [SerializeField] private Vector2 force;
     private Rigidbody2D rb;
-    [SerializeField] private GameObject player;
+    private GameManager code;
     [SerializeField] private float dist, maxDist;
     private Vector2 startPos;
     private Quaternion startRot;
@@ -15,6 +15,7 @@ public class rolling : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        code = GameManager.instance;
         trigger = GetComponent<BoxCollider2D>();
         rb = GetComponent<Rigidbody2D>();
         rb.bodyType = RigidbodyType2D.Static;
@@ -26,10 +27,10 @@ public class rolling : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        dist = Mathf.Sqrt(Mathf.Pow(player.transform.position.x - transform.position.x, 2) + Mathf.Pow(player.transform.position.y - transform.position.y, 2));
+        dist = Mathf.Sqrt(Mathf.Pow(code.Player.transform.position.x - transform.position.x, 2) + Mathf.Pow(code.Player.transform.position.y - transform.position.y, 2));
 
         if (rb.bodyType == RigidbodyType2D.Dynamic)
-            dist = Mathf.Sqrt(Mathf.Pow(transform.position.x - player.transform.position.x, 2) + Mathf.Pow(transform.position.y - player.transform.position.y, 2));
+            dist = Mathf.Sqrt(Mathf.Pow(transform.position.x - code.Player.transform.position.x, 2) + Mathf.Pow(transform.position.y - code.Player.transform.position.y, 2));
 
         if (dist >= maxDist)
         {

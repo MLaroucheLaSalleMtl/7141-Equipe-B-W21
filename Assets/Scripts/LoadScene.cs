@@ -6,14 +6,26 @@ using UnityEngine.SceneManagement;
 public class LoadScene : MonoBehaviour
 {
     private AsyncOperation async;//Contenue du chargement
-    // Start is called before the first frame update
+
 
     public void BtnLoadScene()//pas de parametre = charge la scene suivante
     {
-        if (async != null) return;//Arrete l<executiion si async nes pas null
+        if (async != null) return;//Arrete l'executiion si async nes pas null
 
         Scene currScene = SceneManager.GetActiveScene();
         async = SceneManager.LoadSceneAsync(currScene.buildIndex + 1);//charge la scene suivante
+    }
+    public void BtnLoadScene(int i)//i = numero de scene
+    {
+        if (async != null) return;//Arrete l'executiion si async nes pas null
+     
+        async = SceneManager.LoadSceneAsync(i);//charge la scene au numero i
+    }
+    public void BtnLoadScene(string s)//s = nom de la scene
+    {
+        if (async != null) return;//Arrete l'executiion si async nes pas null
+                
+        async = SceneManager.LoadSceneAsync(s);//charge la scene au nom de s
     }
     void Start()
     {

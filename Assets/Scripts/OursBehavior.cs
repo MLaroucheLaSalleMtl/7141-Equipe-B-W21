@@ -47,6 +47,13 @@ public class OursBehavior : MonoBehaviour
     public SpriteRenderer mySprite;
     public HealthBarBehavior healthBar;
 
+    static System.Random rand = new System.Random();
+
+    [Header("Random Objects")]
+    public GameObject snowballs;
+    public GameObject coins;
+    public GameObject iceCream;
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -96,6 +103,7 @@ public class OursBehavior : MonoBehaviour
         if (currentHealth <= 0)
         {
             Destroy(gameObject);
+            RandomObject();
         }
     }
 
@@ -129,6 +137,24 @@ public class OursBehavior : MonoBehaviour
         else
         {
             timeBwShots -= Time.deltaTime; //Le timebtwShots diminue de 1 a chaque seconde
+        }
+    }
+
+    void RandomObject()
+    {
+        int number = rand.Next(3);
+
+        if (number == 0)
+        {
+            Instantiate(snowballs, alive.transform.position, Quaternion.identity);
+        }
+        else if (number == 1)
+        {
+            Instantiate(coins, alive.transform.position, Quaternion.identity);
+        }
+        else if (number == 2)
+        {
+            Instantiate(iceCream, alive.transform.position, Quaternion.identity);
         }
     }
 
