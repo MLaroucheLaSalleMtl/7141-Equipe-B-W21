@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     public Vector2 checkpoint;
     [SerializeField] private List<GameObject> hazardManager;
     [SerializeField] private int checkpointID;
+    [SerializeField] private bool thereBoss;
+    [SerializeField] private BearBossBehavior boss;
     #endregion
 
     #region Variable UI
@@ -38,13 +40,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject panelPlayerUI;
 
     [SerializeField] private GameObject panelPause;
+
+    [SerializeField] private GameObject panelGameOver;
     
     [SerializeField] private GameObject selectMenu;
     
     [SerializeField] private Selectable defaultBtn;
-
-
-
     
     #endregion
 
@@ -59,20 +60,30 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
     }
 
+
     // Start is called before the first frame update
     void Start()
     {        
         checkpointID = 0;
         checkpoint = startpoint.transform.position;
         Player.transform.position = checkpoint;
+
+        if (thereBoss)
+            end.SetActive(false);
+        else
+        {
+            end.SetActive(true);
+            boss = null;
+        }
+
         time = 599;
 
         data.hp = 5;
-        data.lives = 5;
-        data.score = 0;
+        
         panelEnd.SetActive(false);
         panelPlayerUI.SetActive(true);
         panelPause.SetActive(false);
+        panelGameOver.SetActive(false);
         CheckpointIDCheck();
     }
 
@@ -82,7 +93,12 @@ public class GameManager : MonoBehaviour
         StartTime();
         Text();
         if (data.hp <= 0)
-            Death();
+        {
+            Death();            
+        }
+
+        if ((thereBoss) && (boss.currentHealth <= 0))
+            end.SetActive(true);
     }
     #endregion
 
@@ -96,7 +112,11 @@ public class GameManager : MonoBehaviour
             CheckpointIDCheck();
         }
         else
-            SceneManager.LoadScene("Level1");
+        {
+            panelGameOver.SetActive(true);
+            Time.timeScale = 0f;
+            data.lives = data.maxHp+1;
+        }
     }
 
     public void LevelFinish()// active la fin du niveau
@@ -164,9 +184,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                selectMenu.SetActive(false);
-                panelPause.SetActive(false);
-                Time.timeScale = 1f;
+                //Resume();
             }
         }
         

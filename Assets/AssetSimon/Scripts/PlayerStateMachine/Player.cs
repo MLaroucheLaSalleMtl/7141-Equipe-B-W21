@@ -34,6 +34,8 @@ public class Player : MonoBehaviour
     public Rigidbody2D Rigid { get; private set; }//reference vers le rigidBody2d
     //public Vector2 CurrentVelocity { get; private set; }
     public GameObject snowball;
+
+    public AudioSource clip;
     #endregion
 
     #region Check Transforms
@@ -120,6 +122,7 @@ public class Player : MonoBehaviour
         Anim = GetComponent<Animator>();//cache l'animator
         InputMove = GetComponent<PlayerMovement>();//cache le input handler
         Rigid = GetComponent<Rigidbody2D>();//cache le rigidbody
+        clip = GetComponent<AudioSource>();
         playerData.hp = 5;//set le nombre de hp du joueur a 5
         playerData.canTakeDamage = true;
         playerData.snowBallCount = 10;

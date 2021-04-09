@@ -10,6 +10,8 @@ public class Falling : MonoBehaviour
     private Animator anim;
     private Collider2D trigger;
     [SerializeField] private bool canIdle = false;
+    [SerializeField] private int distance = 100;
+    [SerializeField] private float time = 5;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +29,7 @@ public class Falling : MonoBehaviour
     {
         RaycastHit2D hit;
         mask = LayerMask.GetMask("Player");
-        hit = Physics2D.Raycast(this.transform.position, Vector2.down, 100, mask);
+        hit = Physics2D.Raycast(this.transform.position, Vector2.down, distance, mask);
         Debug.DrawRay(this.transform.position, Vector2.down);
 
         if (canIdle)
@@ -40,10 +42,16 @@ public class Falling : MonoBehaviour
         {
             rb2d.simulated = true;
             anim.enabled = false;
+            Invoke("Restart", time);
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision) // lorsque le glacier touche quelque chose, il retourne a sa place initiale
+    {
+        Restart();
+    }
+
+    private void Restart()
     {
         rb2d.simulated = false;
         this.transform.position = origine;

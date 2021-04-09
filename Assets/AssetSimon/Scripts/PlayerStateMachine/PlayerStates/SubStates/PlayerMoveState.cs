@@ -16,10 +16,12 @@ public class PlayerMoveState : PlayerGroundedState
     public override void Enter()
     {
         base.Enter();
+        player.clip.Play();
     }
 
     public override void Exit()
     {
+        player.clip.Stop();
         base.Exit();
     }
     public override void LogicUpdate()
@@ -28,6 +30,8 @@ public class PlayerMoveState : PlayerGroundedState
         player.FlipCheck(xInput);
 
         player.SetVelocityX(playerData.speedX * xInput);
+
+
 
         if (xInput == 0)
         {
