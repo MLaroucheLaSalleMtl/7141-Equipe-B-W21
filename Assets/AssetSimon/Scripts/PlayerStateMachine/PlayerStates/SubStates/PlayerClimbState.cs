@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerClimbState : PlayerState
 {
+    private int xInput;
     public PlayerClimbState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
     }
@@ -26,23 +27,36 @@ public class PlayerClimbState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        player.Rigid.simulated = false;
+        player.Rigid.gravityScale = 0f;
+        
     }
 
     public override void Exit()
     {
         base.Exit();
-        player.Rigid.simulated = true;
+        player.Rigid.gravityScale = playerData.gravityScale;
     }
-
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+        xInput = player.InputMove.NormInputX;
+        if (playerData.canClimb == false)
+        {
+            stateMachine.ChangeState(player.IdleState);
+        }
+        else
+        {
+            player.SetVelocityY(playerData.climbSpdY);
+            player.SetVelocityX(playerData.climbSpdX * xInput);
+        }
+
+
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+
     }
 
     // Start is called before the first frame update

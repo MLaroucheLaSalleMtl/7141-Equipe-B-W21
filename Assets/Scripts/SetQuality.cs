@@ -23,7 +23,8 @@ public class SetQuality : MonoBehaviour
     }
 
     public void SetGFX()
-    {
+    { 
+        if(dropdown)
         QualitySettings.SetQualityLevel(dropdown.value, true);
     }
     // Update is called once per frame

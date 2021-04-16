@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+/// <summary>
+/// Ce code provient de la source #5 et a été utilisé et recherché par Fabian et Zachary
+/// Ce script s'applique à la caméra du jeu pour que le script background et layers soient fonctionnels
 
 [ExecuteInEditMode]
 public class ParallaxCamera : MonoBehaviour

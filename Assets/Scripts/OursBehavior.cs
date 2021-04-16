@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// Pour ce code, je me suis basé sur la référence #2 et #1 puis j'ai utilisé ma logique pour faire
-/// en sorte que le tout soit fonctionnel. 
+/// (Fabian)
+/// Pour ce code, je me suis basé sur la référence #2 (7:37 code) et #1 puis j'ai utilisé ma logique pour faire
+/// en sorte que le tout soit fonctionnel et personnalisé pour le jeu. 
 /// </summary>
 
 public class OursBehavior : MonoBehaviour
@@ -126,7 +127,7 @@ public class OursBehavior : MonoBehaviour
         }
     }
 
-    private void Shoot()
+    private void Shoot()  //fonction pour lancer un snowball
     {
         if (timeBwShots <= 0 && playerDetected) //S'il le timeBtwShots <= 0 et que le player est detected
         {
@@ -140,7 +141,7 @@ public class OursBehavior : MonoBehaviour
         }
     }
 
-    void RandomObject()
+    void RandomObject() 
     {
         int number = rand.Next(3);
 

@@ -23,6 +23,7 @@ public class PlayerJumpState : PlayerAbilityState
         player.SetVelocityY(playerData.jumpVelocity);
         amountOfJumpLeft--;
         isAbilityDone = true;
+        player.clips[1].Play();
     }
 
     public bool CanJump()

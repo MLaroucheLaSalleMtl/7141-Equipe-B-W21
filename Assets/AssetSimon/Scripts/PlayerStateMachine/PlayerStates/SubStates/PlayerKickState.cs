@@ -14,6 +14,11 @@ public class PlayerKickState : PlayerAbilityState
     {
     }
 
+    public override void Enter()
+    {
+        base.Enter();
+        player.clips[2].Play();//Jou le 3ieme sons attache au joueur
+    }
     public override void LogicUpdate()
     {
         base.LogicUpdate();

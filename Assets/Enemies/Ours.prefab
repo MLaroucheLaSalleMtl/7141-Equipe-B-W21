@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Enemie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &223721368695815324
 Transform:
@@ -129,7 +129,7 @@ GameObject:
   m_TagString: Enemie
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &223721368801222991
 Transform:
@@ -187,7 +187,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 223721368801222989}
-  m_BodyType: 0
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -213,7 +213,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.42191505, y: 0.29602134}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -224,7 +224,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.75502396, y: 1.5920422}
   m_EdgeRadius: 0
 --- !u!1 &223721368991982071
 GameObject:
@@ -240,7 +240,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &223721368991982070
 Transform:
@@ -270,7 +270,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &1082383736848216834
 Transform:
@@ -293,6 +293,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 223721368695815324}
     m_Modifications:
+    - target: {fileID: 1209122328928799752, guid: cba8e18c40fa6934da6253c53e1bd0a8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 1209122328928799753, guid: cba8e18c40fa6934da6253c53e1bd0a8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -385,9 +389,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: HealthBar
       objectReference: {fileID: 0}
+    - target: {fileID: 1209122329582276486, guid: cba8e18c40fa6934da6253c53e1bd0a8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 1209122329582276487, guid: cba8e18c40fa6934da6253c53e1bd0a8, type: 3}
       propertyPath: Offset.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1209122329711284370, guid: cba8e18c40fa6934da6253c53e1bd0a8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 1209122329806212713, guid: cba8e18c40fa6934da6253c53e1bd0a8, type: 3}
       propertyPath: m_SizeDelta.x
@@ -400,6 +412,14 @@ PrefabInstance:
     - target: {fileID: 1209122329806212713, guid: cba8e18c40fa6934da6253c53e1bd0a8, type: 3}
       propertyPath: m_LocalScale.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1209122329806212715, guid: cba8e18c40fa6934da6253c53e1bd0a8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 1209122330442484221, guid: cba8e18c40fa6934da6253c53e1bd0a8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cba8e18c40fa6934da6253c53e1bd0a8, type: 3}

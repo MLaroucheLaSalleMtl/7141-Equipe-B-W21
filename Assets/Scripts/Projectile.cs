@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+/// (Fabian)
 /// Pour cette partie du code, je me suis inspiré de la vidéo référence #2 ( pour pouvoir faire
 /// fonctionner le déplacement du projectile. Je l'ai ensuite modifier un peu à ma façon pour que
 /// le tout soit bien fonctionnel.
-/// 
 /// </summary>
 
 public class Projectile : MonoBehaviour

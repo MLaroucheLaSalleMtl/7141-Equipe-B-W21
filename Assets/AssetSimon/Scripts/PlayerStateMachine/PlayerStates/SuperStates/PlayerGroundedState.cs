@@ -12,6 +12,7 @@ using UnityEngine;
 public class PlayerGroundedState : PlayerState
 {
     protected int xInput;//input mouvement horizontal
+    protected int yInput;//input mouvement horizontal
 
     private bool JumpInput;//input pour sauter
     private bool Kickinput;//input pour coup de pied
@@ -36,7 +37,7 @@ public class PlayerGroundedState : PlayerState
     }
 
     public override void Exit()
-    {
+    {        
         base.Exit();
     }
 
@@ -46,9 +47,14 @@ public class PlayerGroundedState : PlayerState
         isGrounded = player.CheckifGrounded();   //verifie i le personnage touche au sol
 
         xInput = player.InputMove.NormInputX;
+        yInput = player.InputMove.NormInputY;
         JumpInput = player.InputMove.JumpInput;
         Kickinput = player.InputMove.KickInput;
         Fireinput = player.InputMove.FireInput;
+        if(yInput > 0 && playerData.canClimb)
+        {
+            stateMachine.ChangeState(player.ClimbState);
+        }
         if (Fireinput && playerData.snowBallCount>0)
         {
             //player.InputMove.UseFireInput();

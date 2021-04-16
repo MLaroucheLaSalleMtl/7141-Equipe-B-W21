@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/// (Fabian)
 /// Pour cette partie du code, je me suis basé sur la vidéo #1 dans les références puis ensuite ma logique pour
-/// faire en sorte que tout fonctionne bien.
+/// faire en sorte que tout fonctionne bien et soit personnalisé pour le jeu. La viédo a été utile pour comprendre comment les states 
+/// fonctionne et comment gérer les mouvements des ennemis avec des obstacles (wall, etc)
 /// </summary>
-
-
-
 
 public class NarwalBehavior : MonoBehaviour
 {
@@ -18,7 +17,7 @@ public class NarwalBehavior : MonoBehaviour
         KnockBack
     }
 
-    private State currentState; //State utilisé
+    private State currentState; //State utilisé présentement
 
     private void Update() //Update le walkingState en premier 
     {
@@ -43,7 +42,7 @@ public class NarwalBehavior : MonoBehaviour
 
     [SerializeField] private Transform
         groundCheck,         //Ce qui Check le ground
-        wallCheck,           //Ce qui CHeck le Wall
+        wallCheck,           //Ce qui Check le Wall
         kickCheck;           //Ce qui check le Kick
 
     [SerializeField] private LayerMask whatIsGround; //Layer de Ground
@@ -76,12 +75,12 @@ public class NarwalBehavior : MonoBehaviour
     public SpriteRenderer mySprite; //Sprite du personnage
     public HealthBarBehavior healthBar;
 
-    static System.Random rand = new System.Random();
+    static System.Random rand = new System.Random(); //system random
 
     [Header("Random Objects")]
-    public GameObject snowballs;
-    public GameObject coins;
-    public GameObject iceCream;
+    public GameObject snowballs; //GameObject des snowballs
+    public GameObject coins;     //GameObject du coin
+    public GameObject iceCream;  //GameObject du icecream
 
     private void Start()
     {
@@ -89,7 +88,7 @@ public class NarwalBehavior : MonoBehaviour
         aliveRb = alive.GetComponent<Rigidbody2D>(); //Prend le component RigidBody2D
         currentHealth = maxHealth; //Initialise le currentHealth au maxHealth
         facingDirection = -1; //La direction initiale du Narwal est -1
-        healthBar.SetHealth(currentHealth, maxHealth);
+        healthBar.SetHealth(currentHealth, maxHealth);  //Ajuste la Health bar
     }
 
     //--------WALKING STATE---------------------
@@ -140,7 +139,7 @@ public class NarwalBehavior : MonoBehaviour
         if (currentHealth <= 0.0f)         //Si le currentHealth est égale ou plus bas que zéro
         {
             Destroy(gameObject);           //Appel la fonction Destroy()
-            RandomObject();
+            RandomObject();                //Appel la fonction RandomObjects()
         }
        
     }
@@ -151,19 +150,19 @@ public class NarwalBehavior : MonoBehaviour
         alive.transform.Rotate(0.0f, 180.0f, 0.0f); 
     }
 
-     void RandomObject()
+     void RandomObject() //Fonction qui instantiate un objet random
     {
-        int number = rand.Next(3);
+        int number = rand.Next(3); //Chiffre random entre 0 et 2
 
-        if (number == 0)
+        if (number == 0) //Si 0, il instantiate un snowballStack
         {
             Instantiate(snowballs, aliveRb.transform.position, Quaternion.identity); 
         }
-        else if ( number == 1)
+        else if ( number == 1) //Si 1, il instantiate un coin
         {
             Instantiate(coins, aliveRb.transform.position, Quaternion.identity);
         }
-        else if (number == 2)
+        else if (number == 2) //Si 2, il instantiate un iceCream
         {
             Instantiate(iceCream, aliveRb.transform.position, Quaternion.identity);
         }

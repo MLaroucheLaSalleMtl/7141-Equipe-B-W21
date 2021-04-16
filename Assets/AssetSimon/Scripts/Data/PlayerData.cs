@@ -23,8 +23,10 @@ public class PlayerData : ScriptableObject
     public Vector2 zeroVelocity = Vector2.zero;
 
     [Header("Climb State")]
-    public float climbSpdX = 2.5f;
-    public float climbSpdY = 2.5f;
+    public bool canClimb = false;
+    public float climbSpdX = 1f;
+    public float climbSpdY = 1f;
+    public int gravityScale = 4;
     [Range(0.01f, 1f)] public float climbSmoothDamp = 0.1f;
 
     [Header("Jump State")]//variable de mouvement vertical
@@ -33,7 +35,8 @@ public class PlayerData : ScriptableObject
 
 
     [Header("Check variables")]//variable check
-    public float groundCheckRadius = 0.3f;
+    public float checkRadius = 0.3f;
     public LayerMask whatIsGround;
+    public LayerMask whatIsWall;
     public LayerMask whatIsDamagable;
 }

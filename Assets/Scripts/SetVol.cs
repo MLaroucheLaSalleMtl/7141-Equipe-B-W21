@@ -1,3 +1,5 @@
+//Script venant de GameEngine1, cours sur les menu et UI
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +20,7 @@ public class SetVol : MonoBehaviour
         slider = GetComponent<Slider>();
         float v = PlayerPrefs.GetFloat(nameParam, 0);//0 = +-0db
         slider.value = v;//met le visuel sur la bonne valeur
-        audioM.SetFloat(nameParam, v);
+        audioM.SetFloat(nameParam, v);        
     }
 
     public void SetVolume (float vol)

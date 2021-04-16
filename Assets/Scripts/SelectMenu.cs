@@ -8,6 +8,7 @@ public class SelectMenu : MonoBehaviour
 {
     [SerializeField] private GameObject[] panels = null;
     [SerializeField] private Selectable[] defaultBtn = null;
+    private AudioSource clip;
 
     public void PanelToggle (int position)
     {  //Active et desactive les panneaux et boutons
@@ -16,7 +17,9 @@ public class SelectMenu : MonoBehaviour
             panels[i].SetActive(position == i);//Activer le panel a la position x
             if(position == i)
             {
-                defaultBtn[i].Select();//Mettre le focus sur le bouton du panel selectionne
+                if(clip)
+                    clip.Play();
+                defaultBtn[i].Select();//Mettre le focus sur le bouton du panel selection
             }
             else
             {
@@ -24,16 +27,19 @@ public class SelectMenu : MonoBehaviour
             }
         }
     }
-
+    private void Awake()
+    {
+      
+    }
     public void SavePrefs()
     {
         PlayerPrefs.Save();
     }
     IEnumerator Start()
     {
+        clip = GetComponent<AudioSource>();
         yield return new WaitForFixedUpdate();
-        PanelToggle(0);
-
+        PanelToggle(0); 
     }
 
     // Update is called once per frame

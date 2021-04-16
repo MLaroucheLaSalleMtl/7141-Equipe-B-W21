@@ -12,19 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14cd32bc39e4cd243a6482318c13be01, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
+  maxHp: 5
   hp: 5
   lives: 5
   canTakeDamage: 1
   snowBallCount: 10
+  score: 6100
   speedX: 2.5
   smoothDamp: 0.1
-  zeroVelocity: {x: -0.06304161, y: 0}
+  zeroVelocity: {x: 4.0197932e-11, y: 0}
+  canClimb: 1
+  climbSpdX: 1
+  climbSpdY: 1
+  gravityScale: 4
+  climbSmoothDamp: 0.1
   jumpVelocity: 14
   amountOfJump: 1
-  groundCheckRadius: 0.1
+  checkRadius: 0.3
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
+  whatIsWall:
+    serializedVersion: 2
+    m_Bits: 0
   whatIsDamagable:
     serializedVersion: 2
     m_Bits: 8

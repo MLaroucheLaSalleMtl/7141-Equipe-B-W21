@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// (Fabian)
+///  Ce script combine plusieurs fonctionnalités des ennemis et je les ai modifier utilisant ma logique pour qu'ils soient intéressantes. Par exemple,
+///  il lance des snowballs comme le bear mais celui-ci instantie  snowballs à la fois. Il a aussi une fonction accelerate qui se démarqe des ennemis communs.
+/// </summary>
 public class BearBossBehavior : MonoBehaviour
 {
     private float
@@ -23,16 +28,16 @@ public class BearBossBehavior : MonoBehaviour
 
     [SerializeField]
     private Transform
-        groundCheck,
-        wallCheck,
-        playerCheck,
-        kickCheck;
+        groundCheck,              //Ce qui Check le ground
+        wallCheck,                //Ce qui Check le Wall
+        playerCheck,              //Ce qui Check le Player
+        kickCheck;                //Ce qui Check le kick
 
     private bool
-        groundDetected,
-        wallDetected,
-        playerDetected,
-        kickDetected;
+        groundDetected,           //bool de la détection du ground
+        wallDetected,             //bool de la détection du wall
+        playerDetected,           //bool de la détection du player
+        kickDetected;             //bool de la détection du kick
 
     [SerializeField] private LayerMask whatIsPlayer; //Layer du joueur
     [SerializeField] private LayerMask whatIsKick;   //Layer du Kick
@@ -45,12 +50,12 @@ public class BearBossBehavior : MonoBehaviour
 
     [SerializeField]
     public float
-        groundCheckDistance,
-        wallCheckDistance,
-        movementSpeed,
-        currentHealth,
-        maxHealth,       //Le nombre de points de vie maximal
-        knockBackDuration; //La durée du knockBack
+        groundCheckDistance,    //Distance du ground
+        wallCheckDistance,      //Distance d'un wall
+        movementSpeed,          //Vitesse du mouvement
+        currentHealth,          //points de vie
+        maxHealth,              //Le nombre de points de vie maximal
+        knockBackDuration;      //La durée du knockBack
 
     public Color flashColor;
     public Color baseColor;
@@ -90,13 +95,13 @@ public class BearBossBehavior : MonoBehaviour
             mySprite.color = baseColor; //L'ours reprend sa couleur initiale
         }
         
-        if (!groundDetected || wallDetected)
+        if (!groundDetected || wallDetected) //si le ground ou le wall n'est pas detected
         {
-            Flip();
+            Flip(); //Appel la fonction Flip()
         }
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmos() 
     {
         Gizmos.DrawLine(groundCheck.position, new Vector2(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
         Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
@@ -130,9 +135,9 @@ public class BearBossBehavior : MonoBehaviour
         if (timeBwShots <= 0 && playerDetected) //S'il le timeBtwShots <= 0 et que le player est detected
         {
             GameObject projectileIns1 = Instantiate(projectile, aliveRb.position, Quaternion.identity); //instantiate le projectile
-            GameObject projectileIns2 = Instantiate(projectile, aliveRb.position, Quaternion.identity); //instantiate le projectile
-            GameObject projectileIns3 = Instantiate(projectile, aliveRb.position, Quaternion.identity); //instantiate le projectile
-            projectileIns1.GetComponent<Rigidbody2D>().AddForce(new Vector2(facingDirection * forceLancer, 5), ForceMode2D.Impulse);
+            GameObject projectileIns2 = Instantiate(projectile, aliveRb.position, Quaternion.identity); 
+            GameObject projectileIns3 = Instantiate(projectile, aliveRb.position, Quaternion.identity); 
+            projectileIns1.GetComponent<Rigidbody2D>().AddForce(new Vector2(facingDirection * forceLancer, 5), ForceMode2D.Impulse); //Applique une force au projectile
             projectileIns2.GetComponent<Rigidbody2D>().AddForce(new Vector2(facingDirection * forceLancer, 8), ForceMode2D.Impulse);
             projectileIns3.GetComponent<Rigidbody2D>().AddForce(new Vector2(facingDirection * forceLancer, 11), ForceMode2D.Impulse);
             timeBwShots = startTimeBtwShots;        //Initialise le timebtwShots a la durée entre chaque tirs
@@ -143,15 +148,15 @@ public class BearBossBehavior : MonoBehaviour
         }
     }
 
-    private void Accelerate()
+    private void Accelerate() //fonction qui accélère le boss
     {
-        if (!playerDetected)
+        if (!playerDetected) //si le player n'est pas detected
         {
-            movement.Set((movementSpeed*2) * facingDirection, aliveRb.velocity.y);
+            movement.Set((movementSpeed*2) * facingDirection, aliveRb.velocity.y); //Accélèration de 2x le mouvement du Boss
             aliveRb.velocity = movement;
         }
         else
-        movement.Set(movementSpeed * facingDirection, aliveRb.velocity.y);
+        movement.Set(movementSpeed * facingDirection, aliveRb.velocity.y); //Se déplace à une vitesse normale
         aliveRb.velocity = movement;
     }
 

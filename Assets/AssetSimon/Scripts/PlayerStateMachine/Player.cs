@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
     //public Vector2 CurrentVelocity { get; private set; }
     public GameObject snowball;
 
-    public AudioSource clip;
+    public AudioSource[] clips;
     #endregion
 
     #region Check Transforms
@@ -89,24 +89,12 @@ public class Player : MonoBehaviour
             }
             
         }
-
     }
 
 
+
     void OnTriggerEnter2D(Collider2D collision)
-    {   
-        if (collision.CompareTag("SnowBallStack"))
-        {
-            playerData.snowBallCount += 10;
-        }
-        if (collision.CompareTag("IceCream"))
-        {
-            playerData.hp = playerData.maxHp;
-        }
-        if (collision.CompareTag("Coin"))
-        {
-            playerData.score += 100;
-        }
+    { 
         if (playerData.canTakeDamage)//si le personnage peu prendre des degat
         {
             if (collision.CompareTag("Projectile"))//verifie le tag du collider touche
@@ -115,17 +103,17 @@ public class Player : MonoBehaviour
                 StartCoroutine(FlashCo());//devient invulnerable
             }
         }
-       
     }
     private void Start()
     {
         Anim = GetComponent<Animator>();//cache l'animator
         InputMove = GetComponent<PlayerMovement>();//cache le input handler
         Rigid = GetComponent<Rigidbody2D>();//cache le rigidbody
-        clip = GetComponent<AudioSource>();
+        clips = GetComponents<AudioSource>();
         playerData.hp = 5;//set le nombre de hp du joueur a 5
         playerData.canTakeDamage = true;
         playerData.snowBallCount = 10;
+        playerData.canClimb = false;
         FacingDirection = 1;
 
         StateMachine.initialize(IdleState);//initialise letat de base a IdleState
@@ -159,10 +147,14 @@ public class Player : MonoBehaviour
         CurrentVelocity = workspace;
     }
 
-    public void ReceiveDamage(int damage)
+    public void ReceiveDamage(int damage)//recoit des degat
     {
         playerData.hp = playerData.hp - damage;
-        StateMachine.ChangeState(KnockBackState);
+        if (!playerData.canClimb)
+        {
+            StateMachine.ChangeState(KnockBackState);
+        }
+        
     }
 
     public void EnableKickHitbox()
@@ -188,7 +180,7 @@ public class Player : MonoBehaviour
 
     public bool CheckifGrounded()//retoure vrai 
     {
-        return Physics2D.OverlapCircle(groundCheck.position,playerData.groundCheckRadius,playerData.whatIsGround);
+        return Physics2D.OverlapCircle(groundCheck.position,playerData.checkRadius,playerData.whatIsGround);
     }
     public void FlipCheck(int xInput)
     {

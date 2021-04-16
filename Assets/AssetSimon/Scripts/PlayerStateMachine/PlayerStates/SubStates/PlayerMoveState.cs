@@ -16,12 +16,12 @@ public class PlayerMoveState : PlayerGroundedState
     public override void Enter()
     {
         base.Enter();
-        player.clip.Play();
+        player.clips[0].Play();
     }
 
     public override void Exit()
     {
-        player.clip.Stop();
+        player.clips[0].Stop();
         base.Exit();
     }
     public override void LogicUpdate()
